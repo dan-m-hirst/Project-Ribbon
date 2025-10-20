@@ -59,13 +59,14 @@ if not (len(argv) -1):          # checks for no-args run, i.e. VS Code run rathe
     exclude_free_agents = False
 else:
     datapath = argv[1]      # only use argument when we have it
-    chrome_path = argv[2]
-    exclude_free_agents = argv[3]
+    leagues_path = argv[2]
+    chrome_path = argv[3]
+    exclude_free_agents = argv[4]
 
 if exclude_free_agents == 'TRUE':
-    data = do_all(datapath).query('AP > 0')
+    data = do_all(datapath, leagues_path).query('AP > 0')
 else:
-    data = do_all(datapath)
+    data = do_all(datapath, leagues_path)
 statcols = get_statcols(data)
 
 ## use dcc.Upload for this??????

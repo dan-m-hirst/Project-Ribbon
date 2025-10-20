@@ -41,17 +41,22 @@ def data_import(datapath):
     print("Data cleaned!")
     return data
 
-def join_league_rankings(data):
+def join_league_rankings(data, leagues_path):
     # join leagues to rankings, create index to track rank no.s and create weight cols
     print("Parsing league rankings...")
-    leagues_list = pd.read_html(
-        os.path.join(
-            r'\Users\Daniel\Documents',
-            'Sports Interactive',
-            'Football Manager 2024', 
-            'lgs.html'
+    if leagues_path:
+        leagues_list = pd.read_html(
+            os.path.join(leagues_path)
+            )
+    else:
+        leagues_list = pd.read_html(
+            os.path.join(
+                r'\Users\Daniel\Documents',
+                'Sports Interactive',
+                'Football Manager 2024', 
+                'lgs.html'
+            )
         )
-    )
     league_strength_fieldnm = 'League Strength'
     leagues = leagues_list[0]
     leagues[league_strength_fieldnm] = 1 + leagues.index[::-1]
@@ -118,9 +123,9 @@ def addpercentiles(data):
     return data
 
 
-def do_all(datapath):
+def do_all(datapath, leagues_path):
     data = data_import(datapath)
-    data = join_league_rankings(data)
+    data = join_league_rankings(data, leagues_path)
     data['AP'] = data['AP'].map(convertaskprice)
     data = addpercentiles(data)
     return data
